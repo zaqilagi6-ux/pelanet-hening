@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planet Foto Interaktif</title>
+<style>
+body, html {
+    margin:0;
+    padding:0;
+    height:100vh;
+    overflow:hidden;
+    background:black;
+}
+.space {
+    width:100vw;
+    height:100vh;
+    position:relative;
+    background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
+}
+/* bintang */
+.star {
+    position:absolute;
+    background:white;
+    border-radius:50%;
+    opacity:.8;
+    animation:twinkle 3s infinite alternate;
+}
+@keyframes twinkle {
+from {opacity:.3;}
+to {opacity:.9;}
+}
+/* planet foto */
+.planet {
+    position:absolute;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    overflow:hidden;
+    cursor:grab;
+    box-shadow:0 0 25px pink;
+    animation:orbit 12s linear infinite;
+}
+/* gambar di dalam planet */
+.planet img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+/* orbit */
+@keyframes orbit {
+0% {
+transform: rotate(0deg) translateX(200px) rotate(0deg);
+}
+100% {
+transform: rotate(360deg) translateX(200px) rotate(-360deg);
+}
+}
+</style>
+</head>
+<body>
+<div class="space" id="space"></div>
+<script>
+const space = document.getElementById("space");
+/* buat bintang */
+function createStar(){
+let star=document.createElement("div");
+star.classList.add("star");
+let size=Math.random()*3+1;
+star.style.width=size+"px";
+star.style.height=size+"px";
+star.style.top=Math.random()*window.innerHeight+"px";
+star.style.left=Math.random()*window.innerWidth+"px";
+space.appendChild(star);
+}
+for(let i=0;i<120;i++){
+createStar();
+}
+/* buat planet dari foto kamu */
+let planet=document.createElement("div");
+planet.classList.add("planet");
+planet.style.top="50%";
+planet.style.left="50%";
+/* ganti dengan nama file foto kamu */
+planet.innerHTML=`<img src="hening.png">`;
+space.appendChild(planet);
+/* klik = pause orbit */
+planet.addEventListener("click",()=>{
+if(planet.style.animationPlayState==="paused"){
+planet.style.animationPlayState="running";
+}else{
+planet.style.animationPlayState="paused";
+}
+});
+/* drag planet */
+let dragging=false;
+planet.addEventListener("mousedown",()=>{
+dragging=true;
+planet.style.animation="none";
+});
+document.addEventListener("mousemove",(e)=>{
+if(dragging){
+planet.style.left=e.clientX-60+"px";
+planet.style.top=e.clientY-60+"px";
+}
+});
+document.addEventListener("mouseup",()=>{
+dragging=false;
+});
+</script>
+</body>
+</html>
